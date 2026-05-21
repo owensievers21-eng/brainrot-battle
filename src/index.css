@@ -1,0 +1,117 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-neon-green: #39ff14;
+  --color-neon-purple: #bf00ff;
+  --color-neon-pink: #ff10f0;
+  --color-neon-yellow: #ffff00;
+  --color-neon-cyan: #00f5ff;
+  --color-void: #0a0014;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    @apply bg-void text-white antialiased;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(191, 0, 255, 0.15), transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(57, 255, 20, 0.12), transparent 35%);
+  }
+}
+
+@layer components {
+  .neo-panel {
+    @apply border-4 border-black bg-black/40 shadow-[6px_6px_0_#000];
+  }
+
+  .neo-btn {
+    @apply border-4 border-black px-3 py-2 text-sm font-black uppercase tracking-wide text-black shadow-[4px_4px_0_#000] transition hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0_#000] active:translate-x-1 active:translate-y-1 active:shadow-none disabled:opacity-50;
+  }
+
+  .flash-text {
+    @apply font-black uppercase;
+    animation: flash-text 0.8s linear infinite;
+  }
+
+  .meter-bar {
+    @apply h-4 border-2 border-black bg-black/50;
+  }
+
+  .meter-fill {
+    @apply h-full transition-all duration-150;
+  }
+}
+
+@keyframes screen-shake {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-8px, 4px);
+  }
+  40% {
+    transform: translate(8px, -4px);
+  }
+  60% {
+    transform: translate(-6px, -6px);
+  }
+  80% {
+    transform: translate(6px, 6px);
+  }
+}
+
+@keyframes screen-flash {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(2.5) saturate(2);
+  }
+}
+
+@keyframes flash-text {
+  0%,
+  100% {
+    color: #39ff14;
+    text-shadow: 0 0 8px #39ff14;
+  }
+  50% {
+    color: #bf00ff;
+    text-shadow: 0 0 12px #bf00ff;
+  }
+}
+
+@keyframes pulse-neon {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.animate-screen-shake {
+  animation: screen-shake 0.45s ease-in-out;
+}
+
+.animate-screen-flash {
+  animation: screen-flash 0.35s ease-in-out 3;
+}
+
+.animate-flash-text {
+  animation: flash-text 0.8s linear infinite;
+}
+
+.animate-pulse-neon {
+  animation: pulse-neon 1s ease-in-out infinite;
+}
