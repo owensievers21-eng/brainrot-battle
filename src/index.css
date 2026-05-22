@@ -1,4 +1,9 @@
+/* Tailwind v4: @import replaces v3's @tailwind base/components/utilities */
 @import 'tailwindcss';
+
+/* Scan every file that uses utility classes (required in v4) */
+@source '../index.html';
+@source './**/*.{js,jsx,ts,tsx}';
 
 @theme {
   --color-neon-green: #39ff14;
