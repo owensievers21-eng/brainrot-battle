@@ -1,4 +1,5 @@
 import { MINI_GAMES } from '../minigames';
+import type { MiniGameDefinition } from '../types/game';
 
 export type DashboardGameStatus = '1v1 Live' | 'Solo' | 'Co-op' | 'Tournament';
 
@@ -41,8 +42,10 @@ const ACCENTS: { from: string; to: string }[] = [
   { from: '#39ff14', to: '#ffff00' },
 ];
 
-export function miniGamesToDashboardGames(): DashboardGame[] {
-  return MINI_GAMES.map((game, index) => ({
+export function miniGamesToDashboardGames(
+  gamesList: readonly MiniGameDefinition[] = MINI_GAMES,
+): DashboardGame[] {
+  return gamesList.map((game, index) => ({
     id: game.id,
     title: game.name,
     description: game.tagline,

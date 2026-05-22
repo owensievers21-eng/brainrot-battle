@@ -14,15 +14,15 @@
   body,
   #root {
     height: 100%;
+    min-height: 100%;
+    width: 100%;
     margin: 0;
   }
 
   body {
-    @apply bg-void text-white antialiased;
+    @apply antialiased text-white;
     font-family: 'Segoe UI', system-ui, sans-serif;
-    background-image:
-      radial-gradient(circle at 10% 20%, rgba(191, 0, 255, 0.15), transparent 40%),
-      radial-gradient(circle at 90% 80%, rgba(57, 255, 20, 0.12), transparent 35%);
+    background-color: #020617;
   }
 }
 

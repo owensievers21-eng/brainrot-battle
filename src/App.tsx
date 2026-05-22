@@ -1,7 +1,7 @@
-import { useMemo, useState } from 'react';
-import BrainrotBattleDashboard from './components/BrainrotBattleDashboard';
+import { useCallback, useState } from 'react';
+import Dashboard from './components/Dashboard.jsx';
 import { GameManager } from './components/GameManager';
-import { getFeaturedGameOfTheDay, miniGamesToDashboardGames } from './lib/dashboardGames';
+import { MINI_GAMES } from './minigames';
 
 type AppView = 'dashboard' | 'arena';
 
@@ -10,22 +10,18 @@ export default function App() {
   const [preferredGameId, setPreferredGameId] = useState<string | null>(null);
   const [arenaSession, setArenaSession] = useState(0);
 
-  const dashboardGames = useMemo(() => miniGamesToDashboardGames(), []);
-  const featured = useMemo(() => getFeaturedGameOfTheDay(dashboardGames), [dashboardGames]);
-
-  const openArena = (gameId: string | null) => {
+  const launchGame = useCallback((gameId: string | null) => {
     setPreferredGameId(gameId);
     setArenaSession((n) => n + 1);
     setView('arena');
-  };
+  }, []);
 
   if (view === 'dashboard') {
     return (
-      <BrainrotBattleDashboard
-        games={dashboardGames}
-        gameOfTheDay={featured}
-        onLaunchGame={(id) => openArena(id)}
-        onOpenLobby={() => openArena(null)}
+      <Dashboard
+        gamesList={MINI_GAMES}
+        onLaunchGame={(gameId) => launchGame(gameId)}
+        onOpenLobby={() => launchGame(null)}
       />
     );
   }
