@@ -1,27 +1,12 @@
-/* Tailwind v4: @import replaces v3's @tailwind base/components/utilities */
-@import 'tailwindcss';
-
-/* Scan every file that uses utility classes (required in v4) */
-@source '../index.html';
-@source './**/*.{js,jsx,ts,tsx}';
-
-@theme {
-  --color-neon-green: #39ff14;
-  --color-neon-purple: #bf00ff;
-  --color-neon-pink: #ff10f0;
-  --color-neon-yellow: #ffff00;
-  --color-neon-cyan: #00f5ff;
-  --color-void: #0a0014;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   html,
   body,
   #root {
-    height: 100%;
-    min-height: 100%;
-    width: 100%;
-    margin: 0;
+    @apply m-0 min-h-full h-full w-full;
   }
 
   body {
@@ -52,71 +37,4 @@
   .meter-fill {
     @apply h-full transition-all duration-150;
   }
-}
-
-@keyframes screen-shake {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  20% {
-    transform: translate(-8px, 4px);
-  }
-  40% {
-    transform: translate(8px, -4px);
-  }
-  60% {
-    transform: translate(-6px, -6px);
-  }
-  80% {
-    transform: translate(6px, 6px);
-  }
-}
-
-@keyframes screen-flash {
-  0%,
-  100% {
-    filter: brightness(1);
-  }
-  50% {
-    filter: brightness(2.5) saturate(2);
-  }
-}
-
-@keyframes flash-text {
-  0%,
-  100% {
-    color: #39ff14;
-    text-shadow: 0 0 8px #39ff14;
-  }
-  50% {
-    color: #bf00ff;
-    text-shadow: 0 0 12px #bf00ff;
-  }
-}
-
-@keyframes pulse-neon {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
-.animate-screen-shake {
-  animation: screen-shake 0.45s ease-in-out;
-}
-
-.animate-screen-flash {
-  animation: screen-flash 0.35s ease-in-out 3;
-}
-
-.animate-flash-text {
-  animation: flash-text 0.8s linear infinite;
-}
-
-.animate-pulse-neon {
-  animation: pulse-neon 1s ease-in-out infinite;
 }
