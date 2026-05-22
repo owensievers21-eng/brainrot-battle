@@ -20,7 +20,13 @@ const DEFAULT_P2: PlayerState = {
   color: '#bf00ff',
 };
 
-export function GameManager() {
+export interface GameManagerProps {
+  /** When set, the next round uses this mini-game (from dashboard launch). */
+  preferredGameId?: string | null;
+  onExitToDashboard?: () => void;
+}
+
+export function GameManager({ preferredGameId = null, onExitToDashboard }: GameManagerProps) {
   const [phase, setPhase] = useState<MatchPhase>('lobby');
   const [player1, setPlayer1] = useState<PlayerState>(DEFAULT_P1);
   const [player2, setPlayer2] = useState<PlayerState>(DEFAULT_P2);
@@ -30,6 +36,11 @@ export function GameManager() {
   const [currentGameId, setCurrentGameId] = useState<string | null>(null);
   const [lastWinner, setLastWinner] = useState<string | null>(null);
   const [shake, setShake] = useState(false);
+  const [forcedGameId, setForcedGameId] = useState<string | null>(preferredGameId);
+  const [queuedGameName, setQueuedGameName] = useState<string | null>(() => {
+    if (!preferredGameId) return null;
+    return MINI_GAMES.find((g) => g.id === preferredGameId)?.name ?? null;
+  });
 
   const bus = useActionBus('system');
 
@@ -47,12 +58,17 @@ export function GameManager() {
   };
 
   const beginRound = useCallback(() => {
-    const game = pickRandomGame(currentGameId);
+    let game = pickRandomGame(currentGameId);
+    if (forcedGameId) {
+      game = MINI_GAMES.find((g) => g.id === forcedGameId) ?? game;
+      setForcedGameId(null);
+      setQueuedGameName(null);
+    }
     setCurrentGameId(game.id);
     setRoundKey((k) => k + 1);
     setPhase('round_intro');
     setTimeout(() => setPhase('playing'), 1800);
-  }, [currentGameId]);
+  }, [currentGameId, forcedGameId]);
 
   const handleGameEnd = useCallback(
     (winnerId: string) => {
@@ -99,8 +115,18 @@ export function GameManager() {
         <div>
           <h1 className="flash-text text-2xl md:text-3xl">BRAINROT ARENA</h1>
           <p className="text-xs font-bold text-neon-cyan">1v1 • FIRST TO {ROUNDS_TO_WIN} ROUNDS</p>
+          {queuedGameName && phase === 'lobby' && (
+            <p className="mt-1 text-xs font-bold text-neon-yellow">Queued: {queuedGameName}</p>
+          )}
         </div>
-        <ScoreHud player1={player1} player2={player2} phase={phase} gameName={currentGame?.name} />
+        <div className="flex flex-wrap items-center gap-2">
+          <ScoreHud player1={player1} player2={player2} phase={phase} gameName={currentGame?.name} />
+          {onExitToDashboard && (
+            <NeonButton variant="purple" className="text-xs" onClick={onExitToDashboard}>
+              ← Dashboard
+            </NeonButton>
+          )}
+        </div>
       </header>
 
       <main className="neo-panel min-h-0 flex-1 overflow-hidden p-2">
